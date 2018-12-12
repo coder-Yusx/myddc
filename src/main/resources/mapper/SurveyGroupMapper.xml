@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxyy.yusx.myddc.mapper.SurveyGroupMapper">
+    <resultMap id="BaseResultMap" type="com.zxyy.yusx.myddc.model.SurveyGroup">
+        <id column="group_id" jdbcType="VARCHAR" property="groupId"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="group_sort" jdbcType="INTEGER" property="groupSort"/>
+        <result column="group_dept" jdbcType="VARCHAR" property="groupDept"/>
+        <result column="group_status" jdbcType="INTEGER" property="groupStatus"/>
+        <result column="group_extend1" jdbcType="VARCHAR" property="groupExtend1"/>
+        <result column="group_extend2" jdbcType="VARCHAR" property="groupExtend2"/>
+        <result column="group_extend3" jdbcType="VARCHAR" property="groupExtend3"/>
+        <result column="group_extend4" jdbcType="VARCHAR" property="groupExtend4"/>
+        <result column="group_extend5" jdbcType="VARCHAR" property="groupExtend5"/>
+    </resultMap>
+
+    <insert id="bacthInsertSurveyGroup" parameterType="java.util.List">
+        insert into survey_group
+        (group_id, group_extend1, group_name, group_dept)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.groupId},
+            #{item.groupExtend1},
+            #{item.groupName},
+            #{item.groupDept}
+            )
+        </foreach>
+    </insert>
+</mapper>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxyy.yusx.myddc.mapper.ZgongMapper">
+  <resultMap id="BaseResultMap" type="com.zxyy.yusx.myddc.model.Zgong">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="dept" jdbcType="VARCHAR" property="dept" />
+    <result column="dcha" jdbcType="VARCHAR" property="dcha" />
+    <result column="advice" jdbcType="VARCHAR" property="advice" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="extendTxt1" jdbcType="VARCHAR" property="extendtxt1" />
+    <result column="extendTxt2" jdbcType="VARCHAR" property="extendtxt2" />
+    <result column="extendNum1" jdbcType="INTEGER" property="extendnum1" />
+    <result column="extendNum2" jdbcType="INTEGER" property="extendnum2" />
+    <result column="extendTime1" jdbcType="TIMESTAMP" property="extendtime1" />
+    <result column="extendTime2" jdbcType="TIMESTAMP" property="extendtime2" />
+    <result column="extendDouble1" jdbcType="DOUBLE" property="extenddouble1" />
+    <result column="extendDouble2" jdbcType="DOUBLE" property="extenddouble2" />
+  </resultMap>
+
+  <select id="selectDchz" parameterType="java.util.Map" resultType="com.zxyy.yusx.myddc.model.DchzDto">
+      SELECT
+      zd.dept kshi,
+      count(1) fshu,
+      sum(zd.fwtdu) fwtdu,
+      sum(zd.fwzliao) fwzliang,
+      sum(zd.bsxlv) bsxlv,
+      sum(zd.ldjlv) ldjlv,
+      (
+      sum(zd.fwtdu) + sum(zd.fwzliao) + sum(zd.fwtdu) + sum(zd.bsxlv)
+      ) hji,
+      count(1) * 20 zfen,
+      (
+      sum(zd.fwtdu) + sum(zd.fwzliao) + sum(zd.fwtdu) + sum(zd.bsxlv)
+      ) / (count(1) * 20) zmyd
+      FROM
+      zgong z
+      JOIN zgong_dcha zd ON z.dcha = zd.dcha
+      WHERE 1=1
+      <if test="kshi != null and kshi != ''">
+          AND zd.dept = #{kshi,jdbcType=VARCHAR}
+      </if>
+      <if test="startTime != null and startTime != ''">
+          AND z.createTime &gt;= #{startTime,jdbcType=VARCHAR}
+      </if>
+      <if test="endTime != null and endTime != ''">
+          AND z.createTime &lt;= #{endTime,jdbcType=VARCHAR}
+      </if>
+      GROUP BY
+      zd.dept;
+  </select>
+
+    <select id="selectZgongDcDetail" parameterType="java.util.Map" resultType="com.zxyy.yusx.myddc.model.ZgongDcDetail">
+        SELECT
+        zd.dept kshi,
+        su.user_realname cjren,
+        z.createTime cjsjian,
+        z.advice jyi,
+        zd.fwtdu fwtdu,
+        zd.fwzliao fwzliang,
+        zd.bsxlv bsxlv,
+        zd.ldjlv ldjlv,
+        (
+        zd.fwtdu + zd.fwzliao + zd.ldjlv + zd.bsxlv
+        ) hji,
+        20 mfen,
+        (
+        zd.fwtdu + zd.fwzliao + zd.ldjlv + zd.bsxlv
+        ) / 20 mylv
+        FROM
+        zgong z
+        JOIN zgong_dcha zd join survey_user su
+        ON z.dcha = zd.dcha and z.creator = su.user_name
+        WHERE
+        1 = 1
+        <if test="kshi != null and kshi != ''">
+            AND zd.dept = #{kshi,jdbcType=VARCHAR}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            AND z.createTime &gt;= #{startTime,jdbcType=VARCHAR}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND z.createTime &lt;= #{endTime,jdbcType=VARCHAR}
+        </if>
+    </select>
+</mapper>

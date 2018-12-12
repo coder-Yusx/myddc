@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxyy.yusx.myddc.mapper.CyuanMapper">
+  <resultMap id="BaseResultMap" type="com.zxyy.yusx.myddc.model.Cyuan">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="kshi" jdbcType="VARCHAR" property="kshi" />
+    <result column="ysheng" jdbcType="VARCHAR" property="ysheng" />
+    <result column="hshi" jdbcType="VARCHAR" property="hshi" />
+    <result column="yliao" jdbcType="VARCHAR" property="yliao" />
+    <result column="hqin" jdbcType="VARCHAR" property="hqin" />
+    <result column="zybwsheng" jdbcType="VARCHAR" property="zybwsheng" />
+    <result column="yjian" jdbcType="VARCHAR" property="yjian" />
+    <result column="xming" jdbcType="VARCHAR" property="xming" />
+    <result column="dhua" jdbcType="VARCHAR" property="dhua" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="extend_txt1" jdbcType="VARCHAR" property="extendTxt1" />
+    <result column="extend_txt2" jdbcType="VARCHAR" property="extendTxt2" />
+    <result column="extend_txt3" jdbcType="VARCHAR" property="extendTxt3" />
+    <result column="extend_num1" jdbcType="DOUBLE" property="extendNum1" />
+    <result column="extend_num2" jdbcType="DOUBLE" property="extendNum2" />
+    <result column="extend_int" jdbcType="INTEGER" property="extendInt" />
+    <result column="extend_time" jdbcType="TIMESTAMP" property="extendTime" />
+  </resultMap>
+  
+  <select id="selectCYMYD" parameterType="java.util.Map" resultType="com.zxyy.yusx.myddc.model.CyuanDto">
+    SELECT
+      c.kshi kshi,
+      c.xming hzxming,
+      c.yjian yjian,
+      c.dhua lxfshi,
+      c.createtime txsjian,
+      ys.tdu ystdu,
+      ys.jsu ysjshu,
+      ys.yde ysyde,
+      hs.tdu hstdu,
+      hs.jsu hsjshu,
+      hs.xlu hsxlv,
+      yl.fshe ylfshe,
+      yl.hci ylhci,
+      yl.ct ylct,
+      yl.csheng ylcsheng,
+      yl.xdian ylxdian,
+      yl.tna yltna,
+      yl.jyan yljyan,
+      hq.wsheng hqwsheng,
+      hq.sshi hqsshi,
+      hq.rcyuan hqrcyuan,
+      hq.sddti hqsddti,
+      zy.wsheng zybhjing,
+      (
+          ys.tdu + ys.jsu + ys.yde + hs.tdu + hs.jsu + hs.xlu + yl.fshe + yl.hci + yl.ct + yl.csheng + yl.xdian + yl.tna + yl.jyan + hq.wsheng + hq.sshi + hq.rcyuan + hq.sddti + zy.wsheng
+      ) hji,
+      18 * 5 mfen,
+      (
+          ys.tdu + ys.jsu + ys.yde + hs.tdu + hs.jsu + hs.xlu + yl.fshe + yl.hci + yl.ct + yl.csheng + yl.xdian + yl.tna + yl.jyan + hq.wsheng + hq.sshi + hq.rcyuan + hq.sddti + zy.wsheng
+      ) / (18 * 5) mydu
+    FROM
+        cyuan c
+    JOIN cyuan_hqin hq ON c.hqin = hq.id
+    JOIN cyuan_hshi hs ON c.hshi = hs.id
+    JOIN cyuan_yliao yl ON c.yliao = yl.id
+    JOIN cyuan_ysheng ys ON c.ysheng = ys.id
+    JOIN cyuan_zybwsheng zy ON c.zybwsheng = zy.id
+    WHERE 1=1
+    <if test="kshi!= null and kshi!= ''" >
+      and c.kshi = #{kshi,jdbcType=VARCHAR}
+    </if>
+    <if test="startTime != null and startTime != ''">
+      and c.createtime &gt;= #{startTime,jdbcType=VARCHAR}
+    </if>
+    <if test="endTime != null and endTime != ''">
+      and c.createtime &lt;= #{endTime,jdbcType=VARCHAR}
+    </if>
+    order by c.createtime DESC
+  </select>
+</mapper>
