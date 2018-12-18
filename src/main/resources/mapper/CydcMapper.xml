@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxyy.yusx.myddc.mapper.CydcMapper">
+  <resultMap id="BaseResultMap" type="com.zxyy.yusx.myddc.model.Cydc">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="dept" jdbcType="VARCHAR" property="dept" />
+    <result column="zyhao" jdbcType="VARCHAR" property="zyhao" />
+    <result column="sjhao" jdbcType="VARCHAR" property="sjhao" />
+    <result column="yjian" jdbcType="VARCHAR" property="yjian" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="extendtxt1" jdbcType="VARCHAR" property="extendtxt1" />
+    <result column="extendtxt2" jdbcType="VARCHAR" property="extendtxt2" />
+    <result column="extendint1" jdbcType="INTEGER" property="extendint1" />
+    <result column="extenddouble1" jdbcType="DOUBLE" property="extenddouble1" />
+    <result column="extenddate1" jdbcType="TIMESTAMP" property="extenddate1" />
+  </resultMap>
+
+</mapper>

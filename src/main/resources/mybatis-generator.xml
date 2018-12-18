@@ -62,7 +62,15 @@
                enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false"></table>-->
 
-        <table tableName="yy_kshi" domainObjectName="YyKshi"
+        <table tableName="cydc" domainObjectName="Cydc"
+               enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false"></table>
+
+        <table tableName="cygroup" domainObjectName="Cygroup"
+               enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false"></table>
+
+        <table tableName="cyitem" domainObjectName="Cyitem"
                enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false"></table>
 
