@@ -18,6 +18,20 @@
     <result column="extendDouble2" jdbcType="DOUBLE" property="extenddouble2" />
   </resultMap>
 
+    <select id="selectDcMonth" parameterType="java.lang.String" resultType="com.zxyy.yusx.myddc.model.Zgong">
+          SELECT
+            *
+        FROM
+            zgong z
+        WHERE
+            1=1
+            <if test="_parameter != null and _parameter != ''">
+                AND z.creator = #{_parameter,jdbcType=VARCHAR}
+            </if>
+            and  DATE_FORMAT(z.createTime, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')
+
+    </select>
+
   <select id="selectDchz" parameterType="java.util.Map" resultType="com.zxyy.yusx.myddc.model.DchzDto">
       SELECT
       zd.dept kshi,

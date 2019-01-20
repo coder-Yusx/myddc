@@ -14,4 +14,6 @@ public interface ZgongMapper extends TKMapper<Zgong> {
     List<DchzDto> selectDchz(Map map);
 
     List<ZgongDcDetail> selectZgongDcDetail(Map map);
+
+    List<Zgong> selectDcMonth(String username);
 }

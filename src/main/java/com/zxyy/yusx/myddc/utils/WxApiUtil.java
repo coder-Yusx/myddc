@@ -1,6 +1,7 @@
 package com.zxyy.yusx.myddc.utils;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.http.client.fluent.Request;
 
@@ -25,8 +26,8 @@ public class WxApiUtil {
         System.out.println(s);
         String access_token = "";
         if(!s.isEmpty()){
-            JSONObject jo = new JSONObject().getJSONObject(s);
-            access_token = (String)jo.get("access_token");
+            JSONObject parse = (JSONObject)JSONObject.parse(s);
+            access_token = (String)parse.get("access_token");
 
         }
         return access_token;
@@ -36,7 +37,8 @@ public class WxApiUtil {
 
         String accessToken = getAccessToken();
 
-        String url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token="+accessToken+"&openid=OPENID&lang=zh_CN";
+        //String url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token="+accessToken+"&openid=OPENID&lang=zh_CN";
+        String url = "https://api.weixin.qq.com/sns/userinfo?access_token="+accessToken+"&openid=oEHMquN4BIAwD8Yxbzc5yKvGWnMY&lang=zh_CN";
         String s = "";
         try {
             s=Request.Get(url)
@@ -57,6 +59,7 @@ public class WxApiUtil {
     }
 
     public static void main(String[] args) {
-        getAccessToken();
+        //getAccessToken();
+        getUserInfo();
     }
 }

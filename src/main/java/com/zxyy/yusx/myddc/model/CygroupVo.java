@@ -5,7 +5,7 @@ import java.util.List;
 public class CygroupVo {
 
     private String groupname;
-    private List<Cyitem> itemlist;
+    private List<CyitemVo> itemlist;
 
     public String getGroupname() {
         return groupname;
@@ -15,11 +15,11 @@ public class CygroupVo {
         this.groupname = groupname;
     }
 
-    public List<Cyitem> getItemlist() {
+    public List<CyitemVo> getItemlist() {
         return itemlist;
     }
 
-    public void setItemlist(List<Cyitem> itemlist) {
+    public void setItemlist(List<CyitemVo> itemlist) {
         this.itemlist = itemlist;
     }
 }

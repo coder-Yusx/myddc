@@ -16,4 +16,90 @@
     <result column="extenddate1" jdbcType="TIMESTAMP" property="extenddate1" />
   </resultMap>
 
+  <select id="selectAllSatisfy" resultType="com.zxyy.yusx.myddc.model.CydcDto">
+    SELECT
+	c.dept dept,
+	COUNT(dept)/19 num,
+	SUM(itemscore) score,
+	COUNT(dept)*5 totalscor,
+	SUM(itemscore)/(COUNT(dept)*5) satisfy
+    FROM
+        cydc c
+    JOIN cygroup g
+    JOIN cyitem i ON c.id = g.cyid
+    AND g.id = i.gid
+    group by c.dept
+  </select>
+
+  <select id="selectSatisfyByCondition"  parameterType="java.util.Map" resultType="com.zxyy.yusx.myddc.model.CydcDto">
+    SELECT
+    c.dept dept,
+    COUNT(dept) / 19 num,
+    SUM(itemscore) score,
+    COUNT(dept) * 5 totalscor,
+    SUM(itemscore) / (COUNT(dept) * 5) satisfy
+    FROM
+    cydc c
+    JOIN cygroup g
+    JOIN cyitem i ON c.id = g.cyid
+    AND g.id = i.gid
+    WHERE 1=1
+    <if test="kshi!= null and kshi!= ''" >
+      and c.dept = #{kshi,jdbcType=VARCHAR}
+    </if>
+    <if test="startTime != null and startTime != ''">
+      and c.createtime &gt;= #{startTime,jdbcType=VARCHAR}
+    </if>
+    <if test="endTime != null and endTime != ''">
+      and c.createtime &lt;= #{endTime,jdbcType=VARCHAR}
+    </if>
+    GROUP BY
+    c.dept
+  </select>
+
+  <select id="selectSatisfyDetail" parameterType="java.util.Map" resultType="com.zxyy.yusx.myddc.model.CydcDetailDto">
+    SELECT
+	MAX(c.dept) dept,
+	Max(case i.itemname when '对医生服务态度的满意度' then i.itemscore else 0 end ) 'ysfwu',
+	Max(case i.itemname when '对医生医疗技术的满意度' then i.itemscore else 0 end ) 'ysyl',
+	Max(case i.itemname when '对医生告知病情的满意度' then i.itemscore else 0 end ) 'ysgz',
+	Max(case i.itemname when '对医生医德的满意度' then i.itemscore else 0 end ) 'ysyd',
+	Max(case i.itemname when '对护士服务态度的满意度' then i.itemscore else 0 end ) 'hsfw',
+	Max(case i.itemname when '对护士护理技术的满意度' then i.itemscore else 0 end ) 'hsjs',
+	Max(case i.itemname when '对护士护理服务及时、主动性的满意度' then i.itemscore else 0 end ) 'hsjz',
+	Max(case i.itemname when '对检验科服务的满意度' then i.itemscore else 0 end ) 'yljy',
+	Max(case i.itemname when '对放射科（拍片）服务的满意度' then i.itemscore else 0 end ) 'ylfs',
+	Max(case i.itemname when '对CT室服务的满意度' then i.itemscore else 0 end ) 'ylct',
+	Max(case i.itemname when '对核磁室服务的满意度' then i.itemscore else 0 end ) 'ylhs',
+	Max(case i.itemname when '对超生诊断科（B超）服务的满意度' then i.itemscore else 0 end ) 'ylbc',
+	Max(case i.itemname when '对心电图室服务的满意度' then i.itemscore else 0 end ) 'ylxd',
+	Max(case i.itemname when '对推拿室服务的满意度' then i.itemscore else 0 end ) 'yltn',
+	Max(case i.itemname when '对清洁卫生的满意度' then i.itemscore else 0 end ) 'hqqj',
+	Max(case i.itemname when '对膳食的满意度' then i.itemscore else 0 end ) 'hqss',
+	Max(case i.itemname when '对办理出、入院手续的满意度' then i.itemscore else 0 end ) 'hqrc',
+	Max(case i.itemname when '对保障：水、电、电梯的满意度' then i.itemscore else 0 end ) 'hqsdd',
+	Max(case i.itemname when '住院部环境清洁、整齐' then i.itemscore else 0 end ) 'zyhj',
+	c.yjian,
+	c.createtime,
+	SUM(i.itemscore) score,
+	COUNT(c.dept)*5 totalscor,
+	SUM(i.itemscore)/(COUNT(c.dept)*5) satisfy
+    FROM
+        cydc c
+    JOIN cygroup g
+    JOIN cyitem i ON c.id = g.cyid
+    AND g.id = i.gid
+    WHERE 1=1
+    <if test="kshi!= null and kshi!= ''" >
+      and c.dept = #{kshi,jdbcType=VARCHAR}
+    </if>
+    <if test="startTime != null and startTime != ''">
+      and c.createtime &gt;= #{startTime,jdbcType=VARCHAR}
+    </if>
+    <if test="endTime != null and endTime != ''">
+      and c.createtime &lt;= #{endTime,jdbcType=VARCHAR}
+    </if>
+    group by c.id
+    order by c.dept
+  </select>
 </mapper>

@@ -59,4 +59,10 @@ public class ZgongService implements IZgongService {
         }
         return zgongDcDetails;
     }
+
+    @Override
+    public List<Zgong> selectDcMonth(String username) {
+        return zgongMapper.selectDcMonth(username);
+    }
+
 }

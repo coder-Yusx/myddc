@@ -14,13 +14,8 @@ public class SurveyUserService implements ISurveyUserService {
     private SurveyUserMapper surveyUserMapper;
 
     @Override
-    public boolean validateUser(SurveyUser surveyUser) {
+    public SurveyUser validateUser(SurveyUser surveyUser) {
 
-        SurveyUser user = surveyUserMapper.selectOne(surveyUser);
-
-        if (user != null) {
-            return true;
-        }
-        return false;
+        return surveyUserMapper.selectOne(surveyUser);
     }
 }

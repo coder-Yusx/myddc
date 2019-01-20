@@ -14,4 +14,6 @@ public interface IZgongService {
     List<DchzDto> getDchz(Map map);
 
     List<ZgongDcDetail> getZgongDcDetail(Map map);
+
+    List<Zgong> selectDcMonth(String username);
 }

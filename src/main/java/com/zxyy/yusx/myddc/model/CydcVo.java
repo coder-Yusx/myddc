@@ -7,6 +7,7 @@ public class CydcVo {
     private String kshi;
     private String zyhao;
     private String sjhao;
+    private String yjian;
     private List<CygroupVo> dcha;
 
     public String getKshi() {
@@ -39,5 +40,13 @@ public class CydcVo {
 
     public void setDcha(List<CygroupVo> dcha) {
         this.dcha = dcha;
+    }
+
+    public String getYjian() {
+        return yjian;
+    }
+
+    public void setYjian(String yjian) {
+        this.yjian = yjian;
     }
 }

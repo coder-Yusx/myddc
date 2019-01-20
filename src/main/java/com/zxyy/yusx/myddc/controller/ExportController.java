@@ -1,7 +1,10 @@
 package com.zxyy.yusx.myddc.controller;
 
+import com.zxyy.yusx.myddc.model.CydcDetailDto;
 import com.zxyy.yusx.myddc.model.CyuanDto;
 import com.zxyy.yusx.myddc.model.DchzDto;
+import com.zxyy.yusx.myddc.result.AjaxResult;
+import com.zxyy.yusx.myddc.service.ICydcService;
 import com.zxyy.yusx.myddc.service.impl.CyuanService;
 import com.zxyy.yusx.myddc.service.impl.ZgongService;
 import com.zxyy.yusx.myddc.utils.ExcelUtil;
@@ -17,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +30,7 @@ import java.util.Map;
 public class ExportController {
 
     @Autowired
-    private CyuanService cyuanService;
+    private ICydcService cydcService;
     @Autowired
     private ZgongService zgongService;
 
@@ -81,6 +85,7 @@ public class ExportController {
     //导出excel
     @RequestMapping(value = "/report",method = RequestMethod.POST)
     public void cyuanReport(HttpServletRequest request, HttpServletResponse response, String kshi, String startTime, String endTime){
+        AjaxResult result = new AjaxResult();
         Map map = new HashMap();
         if(StringUtil.isNotEmpty(kshi)){
             map.put("kshi",kshi);
@@ -91,45 +96,46 @@ public class ExportController {
         if(StringUtil.isNotEmpty(endTime)){
             map.put("endTime",endTime);
         }
-        List<CyuanDto> cymyd = cyuanService.getCYMYD(map);
+        List<CydcDetailDto> satisfyDetail = cydcService.getSatisfyDetail(map);
 
         //excel标题
-        String[] title = {"科室","患者姓名","联系方式","填写时间","医生态度","医生技术","医生医德","护士态度","护士技术",
+        String[] title = {"科室","医生态度","医生技术","医生告知病情","医生医德","护士态度","护士技术",
                 "护士效率","医疗放射","医疗核磁","医疗ct","医疗超声","医疗心电","医疗推拿","医疗检验","后勤卫生","后勤膳食",
-                "后勤入出院","后勤水电电梯","住院部环境","合计","满分","满意率"};
+                "后勤入出院","后勤水电电梯","住院部环境","意见","填写时间","得分","总分","满意度"};
         //excel文件名
         String fileName = "襄阳市中心医院出院患者满意度调查表"+System.currentTimeMillis()+".xls";
 
         String sheetName = "襄阳市中心医院出院患者满意度调查";
-        String[][] content = content = new String[cymyd.size()+1][title.length+1];
-        for(int i=0;i<cymyd.size();i++){
-            CyuanDto cyuanDto = cymyd.get(i);
-            if(cyuanDto != null){
-                content[i][0] = cyuanDto.getKshi();
-                content[i][1] = cyuanDto.getHzxming();
-                content[i][2] = cyuanDto.getLxfshi();
-                content[i][3] = cyuanDto.getTxsjianStr() ;
-                content[i][4] = new Integer(cyuanDto.getYstdu()).toString();
-                content[i][5] = new Integer(cyuanDto.getYsjshu()).toString() ;
-                content[i][6] = new Integer(cyuanDto.getYsyde()).toString() ;
-                content[i][7] = cyuanDto.getHzxming() ;
-                content[i][8] = new Integer(cyuanDto.getHstdu()).toString() ;
-                content[i][9] = new Integer(cyuanDto.getHsjshu()).toString() ;
-                content[i][10] = new Integer(cyuanDto.getHsxlv()).toString() ;
-                content[i][11] = new Integer(cyuanDto.getYlfshe()).toString() ;
-                content[i][12] = new Integer(cyuanDto.getYlhci()).toString() ;
-                content[i][13] = new Integer(cyuanDto.getYlct()).toString() ;
-                content[i][14] = new Integer(cyuanDto.getYlcsheng()).toString() ;
-                content[i][15] = new Integer(cyuanDto.getYlxdian()).toString() ;
-                content[i][16] = new Integer(cyuanDto.getYltna()).toString() ;
-                content[i][17] = new Integer(cyuanDto.getYljyan()).toString() ;
-                content[i][18] = new Integer(cyuanDto.getHqwsheng()).toString() ;
-                content[i][19] = new Integer(cyuanDto.getHqsshi()).toString() ;
-                content[i][20] = new Integer(cyuanDto.getHqsddti()).toString() ;
-                content[i][21] = new Integer(cyuanDto.getZybhjing()).toString() ;
-                content[i][22] = new Integer(cyuanDto.getHji()).toString() ;
-                content[i][23] = new Integer(cyuanDto.getMfen()).toString() ;
-                content[i][24] = cyuanDto.getMylv();
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        String[][] content = content = new String[satisfyDetail.size()+1][title.length+1];
+        for(int i=0;i<satisfyDetail.size();i++){
+            CydcDetailDto cydcDetailDto = satisfyDetail.get(i);
+            if(cydcDetailDto != null){
+                content[i][0] = cydcDetailDto.getDept();
+                content[i][1] = new Integer(cydcDetailDto.getYsfwu()).toString();
+                content[i][2] = new Integer(cydcDetailDto.getYsyl()).toString();
+                content[i][3] = new Integer(cydcDetailDto.getYsgz()).toString();
+                content[i][4] = new Integer(cydcDetailDto.getYsyd()).toString();
+                content[i][5] = new Integer(cydcDetailDto.getHsjs()).toString() ;
+                content[i][6] = new Integer(cydcDetailDto.getHsfw()).toString() ;
+                content[i][7] = new Integer(cydcDetailDto.getHsjz()).toString() ;
+                content[i][8] = new Integer(cydcDetailDto.getYlfs()).toString() ;
+                content[i][9] = new Integer(cydcDetailDto.getYlhs()).toString() ;
+                content[i][10] = new Integer(cydcDetailDto.getYlct()).toString() ;
+                content[i][11] = new Integer(cydcDetailDto.getYlbc()).toString() ;
+                content[i][12] = new Integer(cydcDetailDto.getYlxd()).toString() ;
+                content[i][13] = new Integer(cydcDetailDto.getYltn()).toString() ;
+                content[i][14] = new Integer(cydcDetailDto.getYljy()).toString() ;
+                content[i][15] = new Integer(cydcDetailDto.getHqqj()).toString() ;
+                content[i][16] = new Integer(cydcDetailDto.getHqss()).toString() ;
+                content[i][17] = new Integer(cydcDetailDto.getHqrc()).toString() ;
+                content[i][18] = new Integer(cydcDetailDto.getHqsdd()).toString() ;
+                content[i][19] = new Integer(cydcDetailDto.getZyhj()).toString() ;
+                content[i][20] = cydcDetailDto.getYjian();
+                content[i][21] = sf.format(cydcDetailDto.getCreatetime());
+                content[i][22] = new Integer(cydcDetailDto.getScore()).toString() ;
+                content[i][23] = new Integer(cydcDetailDto.getTotalscor()).toString() ;
+                content[i][24] = Double.toString(cydcDetailDto.getSatisfy());
             }
         }
         HSSFWorkbook wb = ExcelUtil.getHSSFWorkbook(sheetName, title, content, null);

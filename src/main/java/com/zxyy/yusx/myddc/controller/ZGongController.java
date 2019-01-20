@@ -22,6 +22,18 @@ public class ZGongController {
     @Autowired
     private IZgongDchaService zgongDchaService;
 
+    @RequestMapping(value = "/dcmonth",method = RequestMethod.GET)
+    public AjaxResult getDcMonth(@RequestParam String username){
+        AjaxResult ajaxResult = new AjaxResult();
+        List<Zgong> zgongs = zgongService.selectDcMonth(username);
+        if(zgongs != null && zgongs.size()>0){
+            ajaxResult.failure();
+        }else {
+            ajaxResult.success();
+        }
+        return ajaxResult;
+    }
+
     @RequestMapping(value = "/dcdetail",method = RequestMethod.GET)
     public AjaxResult getDcDetail(@RequestParam String kshi, @RequestParam String startTime, @RequestParam String endTime){
         AjaxResult result = new AjaxResult();
@@ -74,6 +86,13 @@ public class ZGongController {
 
     @RequestMapping(value = "/addczgong")
     public AjaxResult addZgong(@RequestBody ZGongVo zGongVo, HttpServletRequest request){
+        AjaxResult ar = new AjaxResult();
+
+        List<Zgong> zgongs = zgongService.selectDcMonth(zGongVo.getUsername());
+        if(zgongs != null && zgongs.size()>0){
+            ar.failure();
+            return  ar;
+        }
         Zgong zGong = null;
         ZgongDcha zGongDcha = null;
         int flag1=0,flag2=0;
@@ -110,7 +129,7 @@ public class ZGongController {
             zGong.setDcha(zgid);
             flag2=zgongService.saveZGong(zGong);
         }
-        AjaxResult ar = new AjaxResult();
+
         if(flag1 >0 && flag2 > 0){
             ar.success();
         } else{

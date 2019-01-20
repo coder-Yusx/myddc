@@ -19,22 +19,16 @@ public class SurveyUserController {
 
     @RequestMapping(value = "/login/{username}", method = RequestMethod.GET)
     public AjaxResult login(@PathVariable("username") String username, HttpServletRequest request) {
-        boolean flag = false;
+        AjaxResult ajaxResult = new AjaxResult();
         SurveyUser surveyUser = new SurveyUser();
-        if (StringUtil.isNotEmpty(username)) {
-            surveyUser.setUserName(username);
-        }
+        surveyUser.setUserName(username);
+        SurveyUser surveyUser1 = surveyUserService.validateUser(surveyUser);
 
-        if (StringUtil.isNotEmpty(surveyUser.getUserName())) {
-            flag = surveyUserService.validateUser(surveyUser);
+        if(surveyUser1 == null){
+            ajaxResult.failure();
+        }else {
+            ajaxResult.success();
         }
-        AjaxResult result = new AjaxResult();
-        result.failure();
-        if (flag){
-            HttpSession session = request.getSession();
-            session.setAttribute("username",username);
-        }
-        result.success();
-        return result;
+        return ajaxResult;
     }
 }
